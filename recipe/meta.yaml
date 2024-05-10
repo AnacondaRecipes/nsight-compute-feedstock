@@ -22,7 +22,7 @@ source:
 
 build:
   number: 2
-  skip: true  # [osx]
+  skip: true  # [osx or (linux and s390x)]
   missing_dso_whitelist:
   - '*'
 
