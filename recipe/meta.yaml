@@ -32,7 +32,7 @@ requirements:
     - {{ compiler("cxx") }}
     - {{ cdt('libglvnd') }}  # [linux]
     - {{ cdt('libglvnd-opengl') }}  # [linux]
-    - sysroot_{{ target_platform }} 2.17  # [linux]
+    - sysroot_{{ target_platform }} {{ conda_glibc_ver }}.*  # [linux]
     #- arm-variant * {{ arm_variant_type }}  # [aarch64]
   host:
     - cuda-version {{ cuda_version }}
