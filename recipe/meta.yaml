@@ -46,7 +46,7 @@ requirements:
     - libxcb                            # [linux]
     - libxkbcommon                      # [linux]
     - {{ cdt('libxkbfile') }}           # [linux]
-    - libzlib
+    - zlib
     - nspr                              # [linux]
     - nss                               # [linux]
     - {{ cdt('libwayland-client') }}    # [linux and aarch64]
