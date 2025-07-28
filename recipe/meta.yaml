@@ -21,13 +21,14 @@ source:
   sha256: a8e497fd4a9dbf12e328e961984f5fad445045efc2568b0cb594ff51da977ba0  # [win]
 
 build:
-  number: 2
+  number: 3
   skip: true  # [osx or (linux and s390x)]
   missing_dso_whitelist:
   - '*'
 
 requirements:
   build:
+    - {{ stdlib('c') }}
     - {{ compiler("c") }}
     - {{ compiler("cxx") }}
     - {{ cdt('libglvnd') }}  # [linux and aarch64]
@@ -36,44 +37,37 @@ requirements:
     #- arm-variant * {{ arm_variant_type }}  # [aarch64]
   host:
     - cuda-version {{ cuda_version }}
-    - {{ cdt('alsa-lib') }}             # [linux]
+    - alsa-lib                          # [linux]
     - dbus                              # [linux]
     - expat
     - fontconfig
     - freetype
-    - krb5
+    - libkrb5 {{ krb5 }}
     - libglib
     - libxcb                            # [linux]
     - libxkbcommon                      # [linux]
-    - {{ cdt('libxkbfile') }}           # [linux]
+    - libxkbfile           # [linux]
     - zlib
     - nspr                              # [linux]
     - nss                               # [linux]
     - {{ cdt('libwayland-client') }}    # [linux and aarch64]
-    #- xcb-util-cursor                  # [linux]
-    - {{ cdt('xcb-util-image') }}       # [linux]
-    - {{ cdt('xcb-util-keysyms') }}     # [linux]
-    #- xcb-util-keysyms                 # [linux]
-    - {{ cdt('xcb-util-renderutil') }}  # [linux]
-    - {{ cdt('xcb-util-wm') }}          # [linux]
-    #- xorg-libice          # [linux]
-    #- xorg-libsm           # [linux]
-    #- xorg-libx11          # [linux]
-    #- xorg-libxcomposite   # [linux]
-    #- xorg-libxdamage      # [linux]
-    #- xorg-libxext         # [linux]
-    #- xorg-libxfixes       # [linux]
-    #- xorg-libxrandr       # [linux]
-    #- xorg-libxrender      # [linux]
-    #- xorg-libxtst         # [linux]
+    - xcb-util-cursor                  # [linux]
+    - xcb-util-image       # [linux]
+    - xcb-util-keysyms                 # [linux]
+    - xcb-util-renderutil  # [linux]
+    - xcb-util-wm          # [linux]
+    - xorg-libice          # [linux]
+    - xorg-libsm           # [linux]
+    - xorg-libx11          # [linux]
+    - xorg-libxcomposite   # [linux]
+    - xorg-libxdamage      # [linux]
+    - xorg-libxext         # [linux]
+    - xorg-libxfixes       # [linux]
+    - xorg-libxrandr       # [linux]
+    - xorg-libxrender      # [linux]
+    - xorg-libxtst         # [linux]
   run:
     - {{ pin_compatible("cuda-version", max_pin="x.x") }}
-    #- {{ pin_compatible("xorg-libxcomposite", max_pin="x.x") }}  # [linux]
-    #- {{ pin_compatible("xorg-libxdamage", max_pin="x.x") }}     # [linux]
-    #- {{ pin_compatible("xorg-libxfixes", max_pin="x.x") }}      # [linux]
-    #- {{ pin_compatible("xorg-libxrandr", max_pin="x.x") }}      # [linux]
-    #- {{ pin_compatible("xorg-libxtst", max_pin="x.x") }}        # [linux]
-    #- {{ pin_compatible("libxkbfile", max_pin="x.x") }}          # [linux]
   run_constrained:
     - arm-variant * {{ arm_variant_type }}  # [aarch64]
 
