@@ -35,38 +35,37 @@ requirements:
     - cf-nvidia-tools 1  # [linux]
   host:
     - cuda-version {{ cuda_version }}
-    - alsa-lib             # [linux]
-    - dbus                 # [linux]
-    - expat
-    - fontconfig
-    - freetype
-    - libglvnd-devel       # [linux]
-    - libopengl-devel      # [linux]
-    - krb5
-    - libglib
-    - libxcb
-    - libxkbcommon         # [linux]
-    - libxkbfile           # [linux]
-    - libzlib
-    - nspr                 # [linux]
-    - nss                  # [linux]
-    - wayland              # [linux]
-    - xcb-util-cursor      # [linux]
-    - xcb-util-image       # [linux]
-    - xcb-util-keysyms     # [linux]
-    - xcb-util-keysyms     # [linux]
-    - xcb-util-renderutil  # [linux]
-    - xcb-util-wm          # [linux]
-    - xorg-libice          # [linux]
-    - xorg-libsm           # [linux]
-    - xorg-libx11          # [linux]
-    - xorg-libxcomposite   # [linux]
-    - xorg-libxdamage      # [linux]
-    - xorg-libxext         # [linux]
-    - xorg-libxfixes       # [linux]
-    - xorg-libxrandr       # [linux]
-    - xorg-libxrender      # [linux]
-    - xorg-libxtst         # [linux]
+    - alsa-lib {{ alsa_lib }}  # [linux]
+    - dbus {{ dbus }}      # [linux]
+    - expat {{ expat }}
+    - fontconfig {{ fontconfig }}
+    - freetype {{ freetype }}
+    - libglvnd-devel {{ libglvnd }}       # [linux]
+    - libopengl-devel {{ libopengl }}      # [linux]
+    - libkrb5 {{ krb5 }}
+    - libglib {{ libglib }}
+    - libxcb {{ libxcb }}      # [linux]
+    - libxkbcommon {{ libxkbcommon }} # [linux]
+    - libxkbfile {{ libxkbfile }}     # [linux]
+    - zlib {{ zlib }}
+    - nspr {{ nspr }}      # [linux]
+    - nss {{ nss }}        # [linux]
+    - wayland {{ wayland }} # [linux]
+    - xcb-util-cursor {{ xcb_util_cursor }}      # [linux]
+    - xcb-util-image {{ xcb_util_image }}        # [linux]
+    - xcb-util-keysyms {{ xcb_util_keysyms }}    # [linux]
+    - xcb-util-renderutil {{ xcb_util_renderutil }} # [linux]
+    - xcb-util-wm {{ xcb_util_wm }}              # [linux]
+    - xorg-libice {{ xorg_libice }}          # [linux]
+    - xorg-libsm {{ xorg_libsm }}            # [linux]
+    - xorg-libx11 {{ xorg_libx11 }}          # [linux]
+    - xorg-libxcomposite {{ xorg_libxcomposite }} # [linux]
+    - xorg-libxdamage {{ xorg_libxdamage }}  # [linux]
+    - xorg-libxext {{ xorg_libxext }}        # [linux]
+    - xorg-libxfixes {{ xorg_libxfixes }}    # [linux]
+    - xorg-libxrandr {{ xorg_libxrandr }}    # [linux]
+    - xorg-libxrender {{ xorg_libxrender }}  # [linux]
+    - xorg-libxtst {{ xorg_libxtst }}        # [linux]
   run:
     - {{ pin_compatible("cuda-version", max_pin="x.x") }}
     - {{ pin_compatible("xorg-libxcomposite", max_pin="x.x") }}  # [linux]
@@ -86,11 +85,7 @@ test:
     - if exist %LIBRARY_PREFIX%\nsight-compute\{{ version_split }}\lib exit 1  # [win]
     - if not exist %PREFIX%\Scripts\ncu.bat exit 1                             # [win]
     - ncu --version                                                            # [build_platform == target_platform]
-    # ncu-ui test can be enabled for aarch64 once GLIBC 2.28 is made available
-    # https://github.com/conda-forge/conda-forge.github.io/issues/1941
-    # ncu-ui test is currently failing on linux64 as well due to missing x11 libs
-    # https://github.com/conda-forge/nsight-compute-feedstock/issues/26
-    # - DISPLAY=localhost:1.0 xvfb-run -a bash -c 'ncu-ui --help-all'            # [linux64]
+    - DISPLAY=localhost:1.0 xvfb-run -a bash -c 'ncu-ui --help-all'            # [linux64]
 
 about:
   home: https://developer.nvidia.com/nsight-compute
