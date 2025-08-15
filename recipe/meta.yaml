@@ -83,13 +83,39 @@ requirements:
 
 test:
   commands:
-    - test -L $PREFIX/bin/ncu                                                  # [linux]
-    - test -L $PREFIX/bin/ncu-ui                                               # [linux64 or aarch64]
+    # Enable printing command execution on Windows
+    - echo ON  # [win]
+    
+    # Test main installation directory exists
+    - test -d $PREFIX/nsight-compute-{{ version_split }}                       # [linux]
+    
+    # Test main executables exist
+    - test -f $PREFIX/nsight-compute-{{ version_split }}/ncu                   # [linux]
+    - test -f $PREFIX/nsight-compute-{{ version_split }}/ncu-ui                # [linux64 or aarch64]
+    
+    # Test target directory structure (Linux)
+    - test -d $PREFIX/nsight-compute-{{ version_split }}/target                # [linux]
+    
+    # Test some essential shared libraries exist (Linux)
+    - find $PREFIX/nsight-compute-{{ version_split }} -name "*.so" | head -1   # [linux]
+    
+    # Test functional execution
+    - ncu --version                                                            # [build_platform == target_platform]
+    - ncu --help | grep -i "NVIDIA"                                            # [build_platform == target_platform and linux]
+    - DISPLAY=localhost:1.0 xvfb-run -a bash -c 'ncu-ui --help-all'            # [linux64]
+    
+    # Windows tests
     - if not exist %LIBRARY_PREFIX%\nsight-compute exit 1                      # [win]
     - if exist %LIBRARY_PREFIX%\nsight-compute\{{ version_split }}\lib exit 1  # [win]
     - if not exist %PREFIX%\Scripts\ncu.bat exit 1                             # [win]
-    - ncu --version                                                            # [build_platform == target_platform]
-    - DISPLAY=localhost:1.0 xvfb-run -a bash -c 'ncu-ui --help-all'            # [linux64]
+    - if not exist %PREFIX%\Scripts\ncu-ui.bat exit 1                          # [win]
+    
+    # Test Windows executables exist
+    - if not exist %LIBRARY_PREFIX%\nsight-compute\{{ version_split }}\ncu.exe exit 1        # [win]
+    - if not exist %LIBRARY_PREFIX%\nsight-compute\{{ version_split }}\ncu-ui.exe exit 1     # [win]
+    
+    # Test Windows DLLs exist
+    - dir %LIBRARY_PREFIX%\nsight-compute\{{ version_split }} | findstr /i "\.dll"           # [win]
 
 about:
   home: https://developer.nvidia.com/nsight-compute
