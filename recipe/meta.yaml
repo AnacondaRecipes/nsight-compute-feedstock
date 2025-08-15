@@ -25,6 +25,10 @@ build:
   skip: true  # [osx or ppc64le]
   missing_dso_whitelist:
     - '*'
+  # The issue with LIEF: ValueError: 1879047926 is not a valid TAG
+  overlinking_ignore_patterns:  # [linux]
+    - "bin/ncu*"                # [linux]
+    - "nsight-compute-*/**"     # [linux]
 
 requirements:
   build:
