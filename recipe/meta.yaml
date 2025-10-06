@@ -32,6 +32,7 @@ build:
 
 requirements:
   build:
+    - {{ stdlib('c') }}
     - {{ compiler("c") }}
     - {{ compiler("cxx") }}
     - {{ stdlib("c") }}
@@ -72,12 +73,6 @@ requirements:
     - xorg-libxtst {{ xorg_libxtst }}        # [linux]
   run:
     - {{ pin_compatible("cuda-version", max_pin="x.x") }}
-    - {{ pin_compatible("xorg-libxcomposite", max_pin="x.x") }}  # [linux]
-    - {{ pin_compatible("xorg-libxdamage", max_pin="x.x") }}     # [linux]
-    - {{ pin_compatible("xorg-libxfixes", max_pin="x.x") }}      # [linux]
-    - {{ pin_compatible("xorg-libxrandr", max_pin="x.x") }}      # [linux]
-    - {{ pin_compatible("xorg-libxtst", max_pin="x.x") }}        # [linux]
-    - {{ pin_compatible("libxkbfile", max_pin="x.x") }}          # [linux]
   run_constrained:
     - arm-variant * {{ arm_variant_type }}  # [aarch64]
 
