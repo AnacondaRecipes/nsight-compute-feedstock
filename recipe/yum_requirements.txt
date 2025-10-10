@@ -1,5 +1,1 @@
-libglvnd
-libglvnd-opengl
-mesa-libGL
-mesa-libEGL-devel
 xorg-x11-server-Xvfb

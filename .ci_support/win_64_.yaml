@@ -2,8 +2,6 @@ c_compiler:
 - vs2019
 c_stdlib:
 - vs
-c_stdlib_version:
-- '2019'
 channel_sources:
 - conda-forge
 channel_targets:
@@ -19,6 +17,6 @@ freetype:
 krb5:
 - '1.21'
 libxcb:
-- '1.15'
+- '1'
 target_platform:
 - win-64
