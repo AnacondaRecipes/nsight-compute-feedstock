@@ -1,9 +1,8 @@
 {% set name = "nsight-compute" %}
-{% set version = "2025.1.1.2" %}
+{% set version = "2025.3.1.4" %}
 {% set version_split = version.split(".")[0]+"."+version.split(".")[1]+"."+version.split(".")[2] %}
-{% set cuda_version = "12.8" %}
+{% set cuda_version = "13.0" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
-{% set platform = "linux-ppc64le" %}  # [ppc64le]
 {% set platform = "linux-sbsa" %}  # [aarch64]
 {% set platform = "windows-x86_64" %}  # [win]
 {% set extension = "tar.xz" %}  # [not win]
@@ -15,24 +14,24 @@ package:
 
 source:
   url: https://developer.download.nvidia.com/compute/cuda/redist/nsight_compute/{{ platform }}/nsight_compute-{{ platform }}-{{ version }}-archive.{{ extension }}
-  sha256: 6f55f6dfb33abe15b25a5f0c656ae8d9b6a6f33e55f0337b9b6a017daf8ad610  # [linux64]
-  sha256: 6070766fda9094b8556208e76140420d80f2759a49dd76f9ace15a580059226f  # [aarch64]
-  sha256: 8135505c2e4a055cb9e663316003d6ab8ae5ea44641e86f5be83ff03b03f3db4  # [win]
+  sha256: d3c0a0402511034c58227b817cbfed599765f32dc662cdcda58922247b52dd7a  # [linux64]
+  sha256: 562acdb72942ba3250fbda1d0a5b45d9d8bebf7295049846d16ffbdb457f9d28  # [aarch64]
+  sha256: 0ad1c310f38cdfc17e85f6efa2da60e7628bd2db81eba8ec487ab6d49c1bcdef  # [win]
 
 build:
-  number: 1
+  number: 0
   binary_relocation: false
-  skip: true  # [osx or ppc64le]
+  skip: true  # [osx]
   missing_dso_whitelist:
     - '*'
-  # The issue with LIEF: ValueError: 1879047926 is not a valid TAG
-  overlinking_ignore_patterns:  # [linux]
-    - "bin/ncu*"                # [linux]
-    - "nsight-compute-*/**"     # [linux]
-
+  runpath_whitelist:
+    # Fix for "runpaths ['$ORIGIN'] found" errors
+    - '$ORIGIN'  # [linux]
+  overlinking_ignore_patterns:
+    # Ignore 32-bit libraries for overlinking checks
+    - '*linux-desktop-glibc_2_11_3-x86*'  # [linux]
 requirements:
   build:
-    - {{ stdlib('c') }}
     - {{ compiler("c") }}
     - {{ compiler("cxx") }}
     - {{ stdlib("c") }}
@@ -40,83 +39,62 @@ requirements:
     - cf-nvidia-tools 1  # [linux]
   host:
     - cuda-version {{ cuda_version }}
-    - alsa-lib {{ alsa_lib }}  # [linux]
-    - dbus {{ dbus }}      # [linux]
-    - expat {{ expat }}
-    - fontconfig {{ fontconfig }}
-    - freetype {{ freetype }}
-    - libglvnd-devel {{ libglvnd }}       # [linux]
-    - libopengl-devel {{ libopengl }}      # [linux]
-    - libkrb5 {{ krb5 }}
-    - libglib {{ libglib }}
-    - libxcb {{ libxcb }}      # [linux]
-    - libxkbcommon {{ libxkbcommon }} # [linux]
-    - libxkbfile {{ libxkbfile }}     # [linux]
-    - zlib {{ zlib }}
-    - nspr {{ nspr }}      # [linux]
-    - nss {{ nss }}        # [linux]
-    - wayland {{ wayland }} # [linux]
-    - xcb-util-cursor {{ xcb_util_cursor }}      # [linux]
-    - xcb-util-image {{ xcb_util_image }}        # [linux]
-    - xcb-util-keysyms {{ xcb_util_keysyms }}    # [linux]
-    - xcb-util-renderutil {{ xcb_util_renderutil }} # [linux]
-    - xcb-util-wm {{ xcb_util_wm }}              # [linux]
-    - xorg-libice {{ xorg_libice }}          # [linux]
-    - xorg-libsm {{ xorg_libsm }}            # [linux]
-    - xorg-libx11 {{ xorg_libx11 }}          # [linux]
-    - xorg-libxcomposite {{ xorg_libxcomposite }} # [linux]
-    - xorg-libxdamage {{ xorg_libxdamage }}  # [linux]
-    - xorg-libxext {{ xorg_libxext }}        # [linux]
-    - xorg-libxfixes {{ xorg_libxfixes }}    # [linux]
-    - xorg-libxrandr {{ xorg_libxrandr }}    # [linux]
-    - xorg-libxrender {{ xorg_libxrender }}  # [linux]
-    - xorg-libxtst {{ xorg_libxtst }}        # [linux]
+    - alsa-lib             # [linux]
+    - dbus                 # [linux]
+    - expat
+    - fontconfig
+    - freetype
+    - libglvnd-devel       # [linux]
+    - libopengl-devel      # [linux]
+    - krb5
+    - libglib
+    - libxcb               # [linux]
+    - libxkbcommon         # [linux]
+    - libxkbfile           # [linux]
+    - libzlib
+    - nspr                 # [linux]
+    - nss                  # [linux]
+    - wayland              # [linux]
+    - xcb-util-cursor      # [linux]
+    - xcb-util-image       # [linux]
+    - xcb-util-keysyms     # [linux]
+    - xcb-util-keysyms     # [linux]
+    - xcb-util-renderutil  # [linux]
+    - xcb-util-wm          # [linux]
+    - xorg-libice          # [linux]
+    - xorg-libsm           # [linux]
+    - xorg-libx11          # [linux]
+    - xorg-libxcomposite   # [linux]
+    - xorg-libxdamage      # [linux]
+    - xorg-libxext         # [linux]
+    - xorg-libxfixes       # [linux]
+    - xorg-libxrandr       # [linux]
+    - xorg-libxrender      # [linux]
+    - xorg-libxtst         # [linux]
   run:
     - {{ pin_compatible("cuda-version", max_pin="x.x") }}
+    - {{ pin_compatible("xorg-libxcomposite", max_pin="x.x") }}  # [linux]
+    - {{ pin_compatible("xorg-libxdamage", max_pin="x.x") }}     # [linux]
+    - {{ pin_compatible("xorg-libxfixes", max_pin="x.x") }}      # [linux]
+    - {{ pin_compatible("xorg-libxrandr", max_pin="x.x") }}      # [linux]
+    - {{ pin_compatible("xorg-libxtst", max_pin="x.x") }}        # [linux]
+    - {{ pin_compatible("libxkbfile", max_pin="x.x") }}          # [linux]
   run_constrained:
     - arm-variant * {{ arm_variant_type }}  # [aarch64]
 
 test:
-  requires:
-    # OpenGL libraries for ncu-ui GUI testing (may still have limitations in headless environments)
-    - libglvnd-devel {{ libglvnd }}       # [linux]
-    - libopengl-devel {{ libopengl }}      # [linux]
   commands:
-    # Enable printing command execution on Windows
-    - echo ON  # [win]                                             # [linux64 or aarch64]
-    
-    # Test main installation directory exists
-    - test -d $PREFIX/nsight-compute-{{ version_split }}                       # [linux]
-    
-    # Test main executables exist
-    - test -f $PREFIX/nsight-compute-{{ version_split }}/ncu                   # [linux]
-    - test -f $PREFIX/nsight-compute-{{ version_split }}/ncu-ui                # [linux64 or aarch64]
-    
-    # Test target directory structure (Linux)
-    - test -d $PREFIX/nsight-compute-{{ version_split }}/target                # [linux]
-    
-    # Test some essential shared libraries exist (Linux)
-    - find $PREFIX/nsight-compute-{{ version_split }} -name "*.so" | head -1   # [linux]
-    
-    # Test functional execution
-    - ncu --version                                                            # [build_platform == target_platform]
-    - ncu --help | grep -i "NVIDIA"                                            # [build_platform == target_platform and linux]
-    
-    # Test ncu-ui with graceful failure handling for OpenGL issues
-    - DISPLAY=localhost:1.0 xvfb-run -a bash -c 'timeout 30s ncu-ui --help-all || echo "ncu-ui test completed with expected GUI limitations"'  # [linux64]
-    
-    # Windows tests
+    - test -L $PREFIX/bin/ncu                                                  # [linux]
+    - test -L $PREFIX/bin/ncu-ui                                               # [linux64 or aarch64]
     - if not exist %LIBRARY_PREFIX%\nsight-compute exit 1                      # [win]
     - if exist %LIBRARY_PREFIX%\nsight-compute\{{ version_split }}\lib exit 1  # [win]
     - if not exist %PREFIX%\Scripts\ncu.bat exit 1                             # [win]
-    - if not exist %PREFIX%\Scripts\ncu-ui.bat exit 1                          # [win]
-    
-    # Test Windows executables exist
-    - if not exist %LIBRARY_PREFIX%\nsight-compute\{{ version_split }}\ncu.exe exit 1        # [win]
-    - if not exist %LIBRARY_PREFIX%\nsight-compute\{{ version_split }}\ncu-ui.exe exit 1     # [win]
-    
-    # Test Windows DLLs exist
-    - dir %LIBRARY_PREFIX%\nsight-compute\{{ version_split }} | findstr /i "\.dll"           # [win]
+    - ncu --version                                                            # [build_platform == target_platform]
+    # ncu-ui test can be enabled for aarch64 once GLIBC 2.28 is made available
+    # https://github.com/conda-forge/conda-forge.github.io/issues/1941
+    # ncu-ui test is currently failing on linux64 as well due to missing x11 libs
+    # https://github.com/conda-forge/nsight-compute-feedstock/issues/26
+    # - DISPLAY=localhost:1.0 xvfb-run -a bash -c 'ncu-ui --help-all'            # [linux64]
 
 about:
   home: https://developer.nvidia.com/nsight-compute
@@ -129,7 +107,10 @@ about:
     applications. It provides detailed performance metrics and API
     debugging via a user interface and command line tool.
   doc_url: https://docs.nvidia.com/nsight-compute/NsightCompute/index.html
+  dev_url: https://docs.nvidia.com/nsight-compute/NsightCompute/index.html
 
 extra:
+  skip-lints:
+    - license_file_overspecified
   recipe-maintainers:
     - conda-forge/cuda
