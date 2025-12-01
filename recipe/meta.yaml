@@ -1,7 +1,7 @@
 {% set name = "nsight-compute" %}
-{% set version = "2025.1.1.2" %}
+{% set version = "2025.3.1.4" %}
 {% set version_split = version.split(".")[0]+"."+version.split(".")[1]+"."+version.split(".")[2] %}
-{% set cuda_version = "12.8" %}
+{% set cuda_version = "13.0" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
 {% set platform = "linux-ppc64le" %}  # [ppc64le]
 {% set platform = "linux-sbsa" %}  # [aarch64]
@@ -15,12 +15,12 @@ package:
 
 source:
   url: https://developer.download.nvidia.com/compute/cuda/redist/nsight_compute/{{ platform }}/nsight_compute-{{ platform }}-{{ version }}-archive.{{ extension }}
-  sha256: 6f55f6dfb33abe15b25a5f0c656ae8d9b6a6f33e55f0337b9b6a017daf8ad610  # [linux64]
-  sha256: 6070766fda9094b8556208e76140420d80f2759a49dd76f9ace15a580059226f  # [aarch64]
-  sha256: 8135505c2e4a055cb9e663316003d6ab8ae5ea44641e86f5be83ff03b03f3db4  # [win]
+  sha256: d3c0a0402511034c58227b817cbfed599765f32dc662cdcda58922247b52dd7a  # [linux64]
+  sha256: 562acdb72942ba3250fbda1d0a5b45d9d8bebf7295049846d16ffbdb457f9d28  # [aarch64]
+  sha256: 0ad1c310f38cdfc17e85f6efa2da60e7628bd2db81eba8ec487ab6d49c1bcdef  # [win]
 
 build:
-  number: 1
+  number: 0
   binary_relocation: false
   skip: true  # [osx or ppc64le]
   missing_dso_whitelist:
