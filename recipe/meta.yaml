@@ -22,11 +22,16 @@ source:
   sha256: e9d558654c98d83049969d133b98922b53ab8f4e3ba9e0a37bdb5e2ff300b7de  # [win]
 
 build:
-  number: 1
+  number: 0
   binary_relocation: false
-  skip: true  # [osx or ppc64le]
+  skip: true  # [osx]
   missing_dso_whitelist:
     - '*'
+  overlinking_ignore_patterns:
+    # Ignore 32-bit libraries for overlinking checks
+    - '*linux-desktop-glibc_2_11_3-x86*'  # [linux]
+    # Added for LIEF 'not a valid TAG' error on linux-64 and linux-aarch64
+    - 'nsight-compute-2025.2.1/*'  # [linux]
 
 requirements:
   build:
@@ -46,7 +51,7 @@ requirements:
     - libopengl-devel      # [linux]
     - krb5
     - libglib
-    - libxcb
+    - libxcb               # [linux]
     - libxkbcommon         # [linux]
     - libxkbfile           # [linux]
     - libzlib
@@ -87,23 +92,22 @@ test:
     - if exist %LIBRARY_PREFIX%\nsight-compute\{{ version_split }}\lib exit 1  # [win]
     - if not exist %PREFIX%\Scripts\ncu.bat exit 1                             # [win]
     - ncu --version                                                            # [build_platform == target_platform]
-    # ncu-ui test can be enabled for aarch64 once GLIBC 2.28 is made available
-    # https://github.com/conda-forge/conda-forge.github.io/issues/1941
-    # ncu-ui test is currently failing on linux64 as well due to missing x11 libs
-    # https://github.com/conda-forge/nsight-compute-feedstock/issues/26
-    # - DISPLAY=localhost:1.0 xvfb-run -a bash -c 'ncu-ui --help-all'            # [linux64]
+    # ncu-ui cannot find 'libOpenGL.so.0'
+    #- DISPLAY=localhost:1.0 xvfb-run -a bash -c 'ncu-ui --help-all'            # [linux]
 
 about:
   home: https://developer.nvidia.com/nsight-compute
   license_file: LICENSE
   license: LicenseRef-NVIDIA-End-User-License-Agreement
   license_url: https://docs.nvidia.com/cuda/eula/index.html
+  license_family: Other
   summary: NVIDIA Nsight Compute is an interactive kernel profiler for CUDA applications
   description: |
     NVIDIA Nsight Compute is an interactive kernel profiler for CUDA
     applications. It provides detailed performance metrics and API
     debugging via a user interface and command line tool.
   doc_url: https://docs.nvidia.com/nsight-compute/NsightCompute/index.html
+  dev_url: https://docs.nvidia.com/nsight-compute/NsightCompute/index.html
 
 extra:
   recipe-maintainers:
