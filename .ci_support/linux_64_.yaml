@@ -27,7 +27,7 @@ fontconfig:
 freetype:
 - '2'
 krb5:
-- '1.21'
+- '1.22'
 libxcb:
 - '1'
 nspr:
