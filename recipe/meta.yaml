@@ -101,6 +101,7 @@ about:
   license_file: LICENSE
   license: LicenseRef-NVIDIA-End-User-License-Agreement
   license_url: https://docs.nvidia.com/cuda/eula/index.html
+  license_family: Other
   summary: NVIDIA Nsight Compute is an interactive kernel profiler for CUDA applications
   description: |
     NVIDIA Nsight Compute is an interactive kernel profiler for CUDA
@@ -110,7 +111,5 @@ about:
   dev_url: https://docs.nvidia.com/nsight-compute/NsightCompute/index.html
 
 extra:
-  skip-lints:
-    - license_file_overspecified
   recipe-maintainers:
     - conda-forge/cuda
