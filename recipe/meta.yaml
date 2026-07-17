@@ -58,7 +58,6 @@ requirements:
     - xcb-util-cursor      # [linux]
     - xcb-util-image       # [linux]
     - xcb-util-keysyms     # [linux]
-    - xcb-util-keysyms     # [linux]
     - xcb-util-renderutil  # [linux]
     - xcb-util-wm          # [linux]
     - xorg-libice          # [linux]
