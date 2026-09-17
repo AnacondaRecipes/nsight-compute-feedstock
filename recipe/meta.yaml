@@ -1,12 +1,17 @@
 {% set name = "nsight-compute" %}
-{% set version = "2026.2.1.5" %}
+{% set version = "2026.3.0.13" %}
 {% set version_split = version.split(".")[0]+"."+version.split(".")[1]+"."+version.split(".")[2] %}
-{% set cuda_version = "13.3" %}
+{% set cuda_version = "13.4" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
 {% set platform = "linux-sbsa" %}  # [aarch64]
-{% set platform = "windows-x86_64" %}  # [win]
+{% set platform = "windows-x86_64" %}  # [win64]
+{% set platform = "windows-arm64" %}  # [win and arm64]
 {% set extension = "tar.xz" %}  # [not win]
 {% set extension = "zip" %}  # [win]
+{% set sha256 = "0565d6d6c2e8425f17245be0a490dd2937443d3410c756667f1e554b6bcd79f6" %}  # [linux64]
+{% set sha256 = "4ac41519b45f29a4433440fab02f1ecaf0fdc9d807ed9ed995446d815172409c" %}  # [aarch64]
+{% set sha256 = "9467f08354c93868aed67c32acad6f5811af46b769f4c5117b3e9210a76f9837" %}  # [win64]
+{% set sha256 = "fa6fee9fe17b02adfbc6554d60be50638b427d2cd4edefaf0c97ed8c1b9f1f05" %}  # [win and arm64]
 
 package:
   name: {{ name|lower }}
@@ -14,12 +19,10 @@ package:
 
 source:
   url: https://developer.download.nvidia.com/compute/cuda/redist/nsight_compute/{{ platform }}/nsight_compute-{{ platform }}-{{ version }}-archive.{{ extension }}
-  sha256: 6d1e789b66b963b2b1d5380cb22efa9d94e2ba9f9c1324280c53fced7cf3e385  # [linux64]
-  sha256: b6a895f80d4573e6023b3bf5b00c653b3f5085d34f43893b2ffed800a9688fbe  # [aarch64]
-  sha256: 42749828322bcdec2bd641e910042c562ca6f8d9e2d9623b9368e9a83d0bc94a  # [win]
+  sha256: {{ sha256 }}
 
 build:
-  number: 0
+  number: 2
   binary_relocation: false
   skip: true  # [osx]
   missing_dso_whitelist:
@@ -42,7 +45,10 @@ requirements:
     - alsa-lib             # [linux]
     - dbus                 # [linux]
     - expat
-    - fontconfig
+    # conda-forge publishes no win-arm64 build of fontconfig or libxcb; every other
+    # non-linux dep here has one, so the solve is unsatisfiable on win-arm64 for just
+    # these two. libxcb is an X11 library and is inert on Windows regardless.
+    - fontconfig          # [not (win and arm64)]
     - freetype
     - libglvnd-devel       # [linux]
     - libopengl-devel      # [linux]
