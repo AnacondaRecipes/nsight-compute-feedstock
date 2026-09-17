@@ -22,7 +22,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 2
+  number: 0
   binary_relocation: false
   skip: true  # [osx]
   missing_dso_whitelist:
@@ -45,10 +45,8 @@ requirements:
     - alsa-lib             # [linux]
     - dbus                 # [linux]
     - expat
-    # conda-forge publishes no win-arm64 build of fontconfig or libxcb; every other
-    # non-linux dep here has one, so the solve is unsatisfiable on win-arm64 for just
-    # these two. libxcb is an X11 library and is inert on Windows regardless.
-    - fontconfig          # [not (win and arm64)]
+    # Anaconda publishes 'fontconfig' for win-arm64 platform
+    - fontconfig
     - freetype
     - libglvnd-devel       # [linux]
     - libopengl-devel      # [linux]
@@ -116,5 +114,7 @@ about:
   dev_url: https://docs.nvidia.com/nsight-compute/NsightCompute/index.html
 
 extra:
+  skip-lints:
+    - deprecate_license_url
   recipe-maintainers:
     - conda-forge/cuda
