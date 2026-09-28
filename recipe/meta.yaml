@@ -1,5 +1,5 @@
 {% set name = "nsight-compute" %}
-{% set version = "2026.3.0.13" %}
+{% set version = "2026.3.1.2" %}
 {% set version_split = version.split(".")[0]+"."+version.split(".")[1]+"."+version.split(".")[2] %}
 {% set cuda_version = "13.4" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
@@ -8,10 +8,10 @@
 {% set platform = "windows-arm64" %}  # [win and arm64]
 {% set extension = "tar.xz" %}  # [not win]
 {% set extension = "zip" %}  # [win]
-{% set sha256 = "0565d6d6c2e8425f17245be0a490dd2937443d3410c756667f1e554b6bcd79f6" %}  # [linux64]
-{% set sha256 = "4ac41519b45f29a4433440fab02f1ecaf0fdc9d807ed9ed995446d815172409c" %}  # [aarch64]
-{% set sha256 = "9467f08354c93868aed67c32acad6f5811af46b769f4c5117b3e9210a76f9837" %}  # [win64]
-{% set sha256 = "fa6fee9fe17b02adfbc6554d60be50638b427d2cd4edefaf0c97ed8c1b9f1f05" %}  # [win and arm64]
+{% set sha256 = "a0039be47cfe551f89d82087256080a9f33c6257d99a72c1164a87466ab072aa" %}  # [linux64]
+{% set sha256 = "78b4913e91f3542aafd7f91ad3ae2b56bd00c81bf9c0eab130472dae97c4cf7f" %}  # [aarch64]
+{% set sha256 = "b243e1b0fec34cd57d12c5c541c73c8578f56cb98ccb4caaa87cac5c435fe216" %}  # [win64]
+{% set sha256 = "3708e6e60bdd1fb6d5633bd60a7563acfe0aa6a0430b51c1b2577fe85cc5cc92" %}  # [win and arm64]
 
 package:
   name: {{ name|lower }}
@@ -42,38 +42,38 @@ requirements:
     - cf-nvidia-tools 1  # [linux]
   host:
     - cuda-version {{ cuda_version }}
-    - alsa-lib             # [linux]
-    - dbus                 # [linux]
-    - expat
+    - alsa-lib {{ alsa_lib }}                        # [linux]
+    - dbus {{ dbus }}                                # [linux]
+    - expat {{ expat }}
     # Anaconda publishes 'fontconfig' for win-arm64 platform
-    - fontconfig
-    - freetype
-    - libglvnd-devel       # [linux]
-    - libopengl-devel      # [linux]
-    - krb5
-    - libglib
-    - libxcb               # [linux]
-    - libxkbcommon         # [linux]
-    - libxkbfile           # [linux]
-    - libzlib
-    - nspr                 # [linux]
-    - nss                  # [linux]
-    - wayland              # [linux]
-    - xcb-util-cursor      # [linux]
-    - xcb-util-image       # [linux]
-    - xcb-util-keysyms     # [linux]
-    - xcb-util-renderutil  # [linux]
-    - xcb-util-wm          # [linux]
-    - xorg-libice          # [linux]
-    - xorg-libsm           # [linux]
-    - xorg-libx11          # [linux]
-    - xorg-libxcomposite   # [linux]
-    - xorg-libxdamage      # [linux]
-    - xorg-libxext         # [linux]
-    - xorg-libxfixes       # [linux]
-    - xorg-libxrandr       # [linux]
-    - xorg-libxrender      # [linux]
-    - xorg-libxtst         # [linux]
+    - fontconfig {{ fontconfig }}
+    - freetype {{ freetype }}
+    - libglvnd-devel                                 # [linux]
+    - libopengl-devel                                # [linux]
+    - krb5 {{ krb5 }}
+    - libglib {{ libglib }}
+    - libxcb {{ libxcb }}                            # [linux]
+    - libxkbcommon {{ libxkbcommon }}                # [linux]
+    - libxkbfile {{ libxkbfile }}                    # [linux]
+    - libzlib {{ libzlib }}
+    - nspr {{ nspr }}                                # [linux]
+    - nss {{ nss }}                                  # [linux]
+    - wayland {{ wayland }}                          # [linux]
+    - xcb-util-cursor {{ xcb_util_cursor }}          # [linux]
+    - xcb-util-image {{ xcb_util_image }}            # [linux]
+    - xcb-util-keysyms {{ xcb_util_keysyms }}        # [linux]
+    - xcb-util-renderutil {{ xcb_util_renderutil }}  # [linux]
+    - xcb-util-wm {{ xcb_util_wm }}                  # [linux]
+    - xorg-libice {{ xorg_libice }}                  # [linux]
+    - xorg-libsm {{ xorg_libsm }}                     # [linux]
+    - xorg-libx11 {{ xorg_libx11 }}                  # [linux]
+    - xorg-libxcomposite {{ xorg_libxcomposite }}    # [linux]
+    - xorg-libxdamage {{ xorg_libxdamage }}           # [linux]
+    - xorg-libxext {{ xorg_libxext }}                # [linux]
+    - xorg-libxfixes {{ xorg_libxfixes }}            # [linux]
+    - xorg-libxrandr {{ xorg_libxrandr }}            # [linux]
+    - xorg-libxrender {{ xorg_libxrender }}          # [linux]
+    - xorg-libxtst {{ xorg_libxtst }}                # [linux]
   run:
     - {{ pin_compatible("cuda-version", max_pin="x.x") }}
     - {{ pin_compatible("xorg-libxcomposite", max_pin="x.x") }}  # [linux]
