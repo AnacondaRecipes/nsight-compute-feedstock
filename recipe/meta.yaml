@@ -1,7 +1,7 @@
 {% set name = "nsight-compute" %}
-{% set version = "2026.3.1.2" %}
+{% set version = "2026.4.0.10" %}
 {% set version_split = version.split(".")[0]+"."+version.split(".")[1]+"."+version.split(".")[2] %}
-{% set cuda_version = "13.4" %}
+{% set cuda_version = "13.5" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
 {% set platform = "linux-ppc64le" %}  # [ppc64le]
 {% set platform = "linux-sbsa" %}  # [aarch64]
@@ -9,10 +9,10 @@
 {% set platform = "windows-arm64" %}  # [win and arm64]
 {% set extension = "tar.xz" %}  # [not win]
 {% set extension = "zip" %}  # [win]
-{% set sha256 = "a0039be47cfe551f89d82087256080a9f33c6257d99a72c1164a87466ab072aa" %}  # [linux64]
-{% set sha256 = "78b4913e91f3542aafd7f91ad3ae2b56bd00c81bf9c0eab130472dae97c4cf7f" %}  # [aarch64]
-{% set sha256 = "b243e1b0fec34cd57d12c5c541c73c8578f56cb98ccb4caaa87cac5c435fe216" %}  # [win64]
-{% set sha256 = "3708e6e60bdd1fb6d5633bd60a7563acfe0aa6a0430b51c1b2577fe85cc5cc92" %}  # [win and arm64]
+{% set sha256 = "927ad81784fc73ff266f6b910995369637a795aad4e3e9312941239b37c9caa7" %}  # [linux64]
+{% set sha256 = "2acdb1e2bed81627cf60c949a1e8a3217d2a665604502e1ec8ac599c0a3ab0d7" %}  # [aarch64]
+{% set sha256 = "10be1c9064f374a35bede1a4fc4a7c512ae7315b81c109fdd05da6de81d7c57e" %}  # [win64]
+{% set sha256 = "782d3ed8b6163f24d4795200ead651263adb62e4a0c8288b31cf06f197cc2300" %}  # [win and arm64]
 
 package:
   name: {{ name|lower }}
@@ -50,7 +50,7 @@ requirements:
     - libopengl-devel      # [linux]
     - krb5
     - libglib
-    - libxcb            # [not (win and arm64)]
+    - libxcb               # [linux]
     - libxkbcommon         # [linux]
     - libxkbfile           # [linux]
     - libzlib
